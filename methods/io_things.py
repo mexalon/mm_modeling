@@ -23,6 +23,7 @@ def del_folder(mydir):
     except OSError as e:
         print("Error: %s - %s." % (e.filename, e.strerror)) 
 
+
 def extract_tar_to_temp_folder(tar_path):
     '''
     Extract tar files to temp folder
@@ -37,6 +38,7 @@ def extract_tar_to_temp_folder(tar_path):
     
     return gz_root_dirname
 
+
 def get_labels_from_g12(g12_path):
     '''
     reading g12.gz file with labels
@@ -47,6 +49,7 @@ def get_labels_from_g12(g12_path):
         rock_labels = np.transpose(rock_labels, (1, 2, 0))
     
     return rock_labels
+
 
 def get_rocks_from_g00(g00_path):
     '''
@@ -66,17 +69,20 @@ def get_rocks_from_g00(g00_path):
     
     return rock_dict
 
+
 def random_perm_1(log_mean, log_sigma):
     '''
     from logmean and logsigma
     '''
     return 10**(log_sigma * np.random.randn() + log_mean)
 
+
 def random_perm_2(log_min, log_max):
     '''
     from genetic class
     '''
     return 10**(log_min + np.random.rand()*(log_max - log_min))
+
 
 def add_random_perm_by_rock_type(some_rock_dict):
     '''
@@ -101,6 +107,7 @@ def add_random_perm_by_rock_type(some_rock_dict):
      
     return some_rock_dict
 
+
 def map_labels_with_some_prop(labels, rock_dict, prop):
     '''
     prop is 'perm' or 'dens' - property keys from rock_dict 
@@ -111,9 +118,10 @@ def map_labels_with_some_prop(labels, rock_dict, prop):
     
     return model
 
+
 def get_random_models(models_list, nmodels):
     '''
-    choose random models from list
+    choosing random nmodels from list
     '''
     if len(models_list) > nmodels:
         short_random_list = random.sample(models_list, nmodels)
@@ -121,6 +129,7 @@ def get_random_models(models_list, nmodels):
         short_random_list = models_list
 
     return short_random_list
+
 
 def write_to_h5dataset(idx, data_to_write, h5dataset):
     '''
@@ -130,13 +139,14 @@ def write_to_h5dataset(idx, data_to_write, h5dataset):
         h5dataset.resize(h5dataset.shape[0]+1, axis=0)
     h5dataset[idx] = data_to_write
 
-def tar_to_downscaled_models(path_to_models, nmodels):
+
+def tar_to_downscaled_models(path_to_models, nmodels, fname='downscaled_models'):
     '''
     folder with tar files processing
     tar with .gz ---> h5 file with downscaled models 
     '''
     CURR_DIR = os.getcwd()
-    yield_path = f'{CURR_DIR}/downscaled_models_{datetime.now().strftime("%m_%d_%Y__%H_%M_%S")}.h5'
+    yield_path = f'{CURR_DIR}/{fname}_{datetime.now().strftime("%m_%d_%Y__%H_%M_%S")}.h5'
     with h5py.File(yield_path, 'w') as targ:
         perm_h5_set = targ.create_dataset("perm", (1, 20, 20, 20), dtype='float16', maxshape=(None, 20, 20, 20)) # resized every iteration
         dens_h5_set = targ.create_dataset("dens", (1, 20, 20, 20), dtype='float16', maxshape=(None, 20, 20, 20))     
