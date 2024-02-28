@@ -3,6 +3,9 @@ class BaseConfig:
         self.side_lenght = (4000, 4000, 4000) # 4 km side  x, y, -z 
         self.shape = (20, 20, 20)   
 
+        # equition type: False = uniform/ True = nonuniform
+        self.eq_non_uniform = False
+
         # time params 
         self.time_scale = 86400 # time scale in sec.
         self.t_range = 30 # time steps 
