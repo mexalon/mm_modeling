@@ -3,9 +3,6 @@ class BaseConfig:
         self.side_lenght = (4000, 4000, 4000) # 4 km side  x, y, -z 
         self.shape = (20, 20, 20)   
 
-        # equition type: False = uniform/ True = nonuniform
-        self.eq_non_uniform = False
-
         # time params 
         self.time_scale = 86400 # time scale in sec.
         self.t_range = 30 # time steps 
@@ -14,9 +11,13 @@ class BaseConfig:
         # ini pore press
         self.P0 = 10e-8 # initial pore Pressure is zero MPa
 
-        # ini rate
-        self.Q = 1 # m^3/s
-        self.source_loc = (2000, 2000, 2000) # meter x, y, -z
+        # sources
+        self.sources = [
+            {'loc':(2000, 2000, 2000), 'Q':[1]},
+                        ]
+
+        # self.Q = [1] # m^3/s
+        # self.source_loc = (2000, 2000, 2000) # meter x, y, -z
 
         # media params
         self.m0 = 0.2 # porocity
