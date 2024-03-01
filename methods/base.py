@@ -9,7 +9,7 @@ class BaseConfig:
         self.dt = 0.0001 # dt, relative to self.time_scale
 
         # ini pore press
-        self.P0 = 10e-8 # initial pore Pressure is zero MPa
+        self.P0 = 0.1 # initial pore Pressure is 0.1 MPa (1 bar)
 
         # sources
         self.sources = [
