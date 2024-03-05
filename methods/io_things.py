@@ -10,7 +10,7 @@ import random
 
 from tqdm.notebook import tqdm
 from datetime import datetime
-from methods.data_proc import downscale
+from methods.data_proc import downscale_to_shape
 
 ROCKS = pd.read_excel('rock_properties.xlsx', index_col=0)
 
@@ -140,7 +140,7 @@ def write_to_h5dataset(idx, data_to_write, h5dataset):
     h5dataset[idx] = data_to_write
 
 
-def tar_to_downscaled_models(path_to_models, nmodels, fname='downscaled_models'):
+def tar_to_downscaled_models(path_to_models, nmodels, target_shape: tuple, fname='downscaled_models'):
     '''
     folder with tar files processing
     tar with .gz ---> h5 file with downscaled models 
@@ -148,8 +148,8 @@ def tar_to_downscaled_models(path_to_models, nmodels, fname='downscaled_models')
     CURR_DIR = os.getcwd()
     yield_path = f'{CURR_DIR}/{fname}_{datetime.now().strftime("%m_%d_%Y__%H_%M_%S")}.h5'
     with h5py.File(yield_path, 'w') as targ:
-        perm_h5_set = targ.create_dataset("perm", (1, 20, 20, 20), dtype='float16', maxshape=(None, 20, 20, 20)) # resized every iteration
-        dens_h5_set = targ.create_dataset("dens", (1, 20, 20, 20), dtype='float16', maxshape=(None, 20, 20, 20))     
+        perm_h5_set = targ.create_dataset("perm",  (1,)+target_shape, dtype='float16', maxshape=(None,)+target_shape) # resized every iteration
+        dens_h5_set = targ.create_dataset("dens",  (1,)+target_shape, dtype='float16', maxshape=(None,)+target_shape)     
         idx = int(0)
 
         tar_list = os.listdir(path_to_models)
@@ -172,8 +172,8 @@ def tar_to_downscaled_models(path_to_models, nmodels, fname='downscaled_models')
                 perm_model = map_labels_with_some_prop(labels, rock_dict, 'perm') # permrability model mD
                 dens_model = map_labels_with_some_prop(labels, rock_dict, 'dens') # density model g/cm^3
 
-                perm_model = downscale(perm_model, (10, 10, 10)) # downscaling
-                dens_model = downscale(dens_model, (10, 10, 10))
+                perm_model = downscale_to_shape(perm_model, target_shape) # downscaling
+                dens_model = downscale_to_shape(dens_model, target_shape)
 
                 write_to_h5dataset(idx, perm_model, perm_h5_set) # writing
                 write_to_h5dataset(idx, dens_model, dens_h5_set)

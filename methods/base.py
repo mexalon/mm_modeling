@@ -1,7 +1,9 @@
+import numpy as np
+
 class BaseConfig:
     def __init__(self, **kwargs):
         self.side_lenght = (4000, 4000, 4000) # 4 km side  x, y, -z 
-        self.shape = (20, 20, 20)   
+        self.shape = (21, 21, 21)   
 
         # time params 
         self.time_scale = 86400 # time scale in sec.
@@ -13,11 +15,8 @@ class BaseConfig:
 
         # sources
         self.sources = [
-            {'loc':(2000, 2000, 2000), 'Q':[1]},
+            {'loc':(2000, 2000, 2000), 'Q':np.array([1]),  'P': 1},
                         ]
-
-        # self.Q = [1] # m^3/s
-        # self.source_loc = (2000, 2000, 2000) # meter x, y, -z
 
         # media params
         self.m0 = 0.2 # porocity
