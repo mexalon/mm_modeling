@@ -24,6 +24,9 @@ class BaseConfig:
         self.K_ro = 10**4 # MPa  dP = K_ro * (dro/ro0)  
         self.K_m = 10**4 # MPa  dP = K_m * (dm/m0) 
 
+        # seismic seed params
+        self.NSAMPL = 100
+    
         self.__dict__.update(kwargs) # updating while init
 
         self.dx_dy_dz = tuple([side_l/num_p for side_l, num_p in zip(self.side_lenght, self.shape)]) # (dx, dy, dz) in meters 
