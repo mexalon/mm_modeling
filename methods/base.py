@@ -18,14 +18,21 @@ class BaseConfig:
             {'loc':(2000, 2000, 2000), 'Q':np.array([1]),  'P': 1},
                         ]
 
-        # media params
-        self.m0 = 0.2 # porocity
+        # media params:
+        # fluid
         self.mu = 2 # visc cP
-        self.K_ro = 10**4 # MPa  dP = K_ro * (dro/ro0)  
-        self.K_m = 10**4 # MPa  dP = K_m * (dm/m0) 
+        self.ro = 1 # fluid dencity, g/cm3
+        self.K_ro = 10**4 # MPa  dP = K_ro * (dro/ro0)  fluid compressabitity
 
-        # seismic seed params
-        self.NSAMPL = 100
+        # solid
+        self.m0 = 0.2 # porocity
+        self.K_m = 10**4 # MPa  dP = K_m * (dm/m0) pore space compressabitity
+        self.poisson = 0.3
+        self.alpha = 1 # Biot coeff
+
+        # seismic params
+        self.NSAMPL = 100 # modeling param
+        self.target_events_num = 1000 # desired number of events to distribute
     
         self.__dict__.update(kwargs) # updating while init
 

@@ -5,20 +5,6 @@ from scipy.interpolate import make_interp_spline
 from pde import PDEBase, ScalarField, VectorField, MemoryStorage, CartesianGrid
 from pde.tools.numba import jit
 
-# # divergence(xi_field*gradient(P)) = xi_field*laplace(P) + dot(gradient(xi_field), gradient(P)) <----- for more stable numerical scheme
-# if params.eq_non_uniform:
-#     eq = PDE({'P': f"xi_field*laplace(P)  + dot(gradient(xi_field), gradient(P)) + {source_time}*source_field"}, 
-#         bc=bc,
-#         consts={'source_field': source_field, 
-#                 'xi_field': xi_field}
-#         )
-# else:
-#     eq = PDE({'P': f"xi_field*laplace(P) + {source_time}*source_field"}, 
-#         bc=bc,
-#         consts={'source_field': source_field, 
-#                 'xi_field': xi_field}
-#         )  
-
 
 class Pore_Press_Diffusion_with_Q_source(PDEBase):
     """Diffusion equation with spatial dependence"""
