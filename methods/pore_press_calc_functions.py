@@ -340,6 +340,7 @@ def test_wells(eq, params, k_list=None):
     
     return pore_press_in_locs, interpolators
 
+
 def get_perms_at_locs(perm, params):
     """retrieving perms at loc coordinates"""
     # generate grid
@@ -348,10 +349,12 @@ def get_perms_at_locs(perm, params):
     perms_at_loc = [perm_field.interpolate(s['loc']) for s in params.sources]
     return perms_at_loc
 
+
 def get_P0_at_locs(p0_field, params):
     """retrieving initial pore pressure at loc coordinates"""
     p0_at_loc = [p0_field.interpolate(s['loc']) for s in params.sources]
     return p0_at_loc
+
 
 def get_q_factors(perm, p0_field, params):
     """getting multiplication factors for base Q params"""
