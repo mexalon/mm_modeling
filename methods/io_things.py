@@ -140,6 +140,15 @@ def write_to_h5dataset(idx, data_to_write, h5dataset):
     h5dataset[idx] = data_to_write
 
 
+def add_data_to_h5dataset(fname, idx, data, set_name):
+    with h5py.File(fname, 'a') as f:
+        if set_name not in f.keys():
+            max_len  = np.max([f[k].shape[0] for k in f.keys()])
+            ev_set = f.create_dataset(set_name,  (max_len,) + data.shape, dtype='float16') # creating dataset with size like maximum other set size in the file
+
+        f[set_name][idx] = data
+
+
 def tar_to_downscaled_models(path_to_models, nmodels, target_shape: tuple, fname='downscaled_models'):
     '''
     folder with tar files processing
@@ -162,8 +171,9 @@ def tar_to_downscaled_models(path_to_models, nmodels, target_shape: tuple, fname
             g12_path_list = [f'{gz_root_dirname}/{gz}' for gz in gz_list if 'g12' in gz] # paths to all g12 files with labels
             print(f'Done')
 
-            models_in_tar_zipped_list = list(zip( g00_path_list, g12_path_list))
-            models_random_short_list = get_random_models(models_in_tar_zipped_list, nmodels)
+            models_in_tar_zipped_list = list(zip(g00_path_list, g12_path_list))
+            # models_random_short_list = get_random_models(models_in_tar_zipped_list, nmodels)
+            models_random_short_list = models_in_tar_zipped_list[0:nmodels]
                 
             for g00_path, g12_path in tqdm(models_random_short_list):          
                 rock_dict = get_rocks_from_g00(g00_path)
@@ -185,3 +195,39 @@ def tar_to_downscaled_models(path_to_models, nmodels, target_shape: tuple, fname
 
     return yield_path
 
+
+def check_tar_integrity(folder_path):
+  """
+  Checks the integrity of all tar files in a folder with progress bar.
+
+  Args:
+    folder_path: The path to the folder containing the tar files.
+  """
+  total_files = sum(1 for filename in os.listdir(folder_path) if filename.endswith(".tar"))
+  pbar = tqdm(total=total_files, desc="Checking tar integrity")
+
+  for filename in os.listdir(folder_path):
+    if not filename.endswith(".tar"):
+      continue
+
+    filepath = os.path.join(folder_path, filename)
+    try:
+      # Open the tar file in read mode
+      with tarfile.open(filepath, "r") as tar:
+        # Iterate through each member (file) in the archive
+        for member in tar:
+          # Check if member is a regular file (skip directories)
+          if not member.isfile():
+            continue
+          # Try to get member information (reading header only)
+          try:
+            tar.getmember(member.name)
+          except (tarfile.ReadError, tarfile.HeaderError) as e:
+            print(f"Error: Integrity issue found in {filepath}: {e}")
+          break
+    except tarfile.ReadError as e:
+      print(f"Error: Could not open {filepath}: {e}")
+    finally:
+      pbar.update(1)  # Update progress bar after each file
+
+  pbar.close()  # Close progress bar

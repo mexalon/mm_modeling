@@ -3,6 +3,7 @@ from scipy import stats
 import numpy as np
 from numpy.polynomial import polynomial as P
 
+
 class Micro_Seismic_Seeds():
     def __init__(self, params, **kwargs):
         self.params = params
@@ -24,6 +25,7 @@ class Micro_Seismic_Seeds():
         self.__dict__.update(kwargs) # updating while init with custom parameters
         self.get_seed_network() # creating seed network
 
+   
     def get_norm_vector(self, azi, dip):
         '''
         azi, dip: np.array
@@ -40,6 +42,7 @@ class Micro_Seismic_Seeds():
         nd = np.cos(dip)
         return np.stack((nx, ny, nd), axis=-1)
 
+    
     def get_seed_network(self):
         # Parameter distribution laws (distribution parameters - arrays with model dimensionality)
         tan_phi_distrib = stats.weibull_min(loc=self.tan_phi, scale=self.tan_phi_sigma, c=1.8) # weibull distribution с=1.8
@@ -69,6 +72,7 @@ class Micro_Seismic_Seeds():
 
         return  tan_phi_rvs, C_rvs, norms_rvs 
     
+
 def get_litostat_pressure(params, ro):
     # ro [g/cm3] can be either an array of the model's shape or a value.
     upper_bound_depth = params.sides[-1][0] # depth of upper bound of reservior, m
@@ -82,6 +86,7 @@ def get_litostat_pressure(params, ro):
     litho_press = litho_press + upper_press # adding overlying  pressure
     return litho_press
 
+
 def get_stress(params, lithostat_pressure):    
     '''
     calculates the stress tensor using Dinnik's formula
@@ -91,6 +96,7 @@ def get_stress(params, lithostat_pressure):
     point_tens = np.diag((poisson_const, poisson_const, 1)).astype('float16')
     stress_tensor = np.expand_dims((lithostat_pressure),(-2,-1)) * point_tens # (x,y,d,3,3)
     return stress_tensor
+
 
 def get_norm_and_shear_stress_on_seeds(tens, norms):
     '''
@@ -108,6 +114,7 @@ def get_norm_and_shear_stress_on_seeds(tens, norms):
     tau = tau.squeeze(-1) # (x,y,d,NSAMPL)
     return sigma_n, tau
 
+
 def check_colomb_criteria(params, pore_press, tan_phi, C, sigma_n, tau):
     '''
     F = tau - (sigma_n - alpha * pore) * tg_phi - C
@@ -118,10 +125,12 @@ def check_colomb_criteria(params, pore_press, tan_phi, C, sigma_n, tau):
     colomb_pass = np.sum(F>0, axis=-1) # number of seeds for which the coulomb criterion was met
     return colomb_pass
 
+
 def get_raw_events(params, colomb_pass):
     events_diff = np.diff(colomb_pass, axis=0).astype('float') # increment at each step in the number of seeds for which the Coulomb criterion is met (t,x,y,d)
     events_diff[events_diff<0] = 0 # positive change only 
     return events_diff
+
 
 def resample_raw_events(params, raw_events):
     if np.sum(raw_events) > 0:
@@ -132,10 +141,12 @@ def resample_raw_events(params, raw_events):
         
     return result
 
+
 def get_events(params, events_dens):
     frac, integ = np.modf(events_dens)
     events  = integ + (np.random.rand(*events_dens.shape)<=frac)
     return events.astype('int')
+
 
 def get_GR_params(mags, nbins=100):
     '''
@@ -148,6 +159,7 @@ def get_GR_params(mags, nbins=100):
     a, b = P.polyfit(bins, np.log10(N), deg=1)
     return a, b
 
+
 def get_magnetude(size, M_min=-1, b=1):
     '''
     magnitude sampling using min magnitude and b-value
@@ -155,6 +167,7 @@ def get_magnetude(size, M_min=-1, b=1):
     ev - 
     '''
     return stats.expon.rvs(size=size, loc=M_min, scale=1/(b*np.log(10)))
+
 
 def get_events_list(ev_matrix):
     '''
@@ -169,3 +182,13 @@ def get_events_list(ev_matrix):
     else:
         result = np.zeros((1, ev_matrix.ndim + 1)) # for the case when there is no events at all
     return result
+
+
+def pad_events(ev_list, targ_len):
+    ev_len = ev_list.shape[0]
+    if ev_len > targ_len:
+        raise IndexError('cant pad it, data is to long')
+
+    pad = - np.ones((targ_len - ev_len,) + ev_list.shape[1:])
+    padded_ev_list = np.concatenate((ev_list, pad), axis=0)
+    return padded_ev_list
