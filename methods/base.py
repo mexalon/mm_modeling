@@ -1,4 +1,9 @@
 import numpy as np
+import yaml
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 
 class BaseConfig:
     def __init__(self, **kwargs):
@@ -16,7 +21,7 @@ class BaseConfig:
 
         # sources
         self.sources = [
-            {'loc':(2000, 2000, 1500), 'Q':np.array([1]),  'P': 1}, # P - target overpressue relative to max pressure in sources (if p0=0.1 MPa, P=-0.05 => abs pressure = 0.1 - 0.05 = 0.05 MPa)
+            {'loc':(2000, 2000, 1500), 'Q':[1],  'P': 1}, # P - target overpressue relative to max pressure in sources (if p0=0.1 MPa, P=-0.05 => abs pressure = 0.1 - 0.05 = 0.05 MPa)
                         ]
 
         # media params:
@@ -40,6 +45,22 @@ class BaseConfig:
         self.side_lenght = tuple([side[1] - side[0] for side in self.sides]) # (x length, y length, d  length) in meters 
         self.dx_dy_dz = tuple([side_l/num_p for side_l, num_p in zip(self.side_lenght, self.shape)]) # (dx, dy, dz) in meters 
         
+    
+    def dump(self, filename='params.yaml'):
+        with open(filename, 'w') as f:
+            yaml.dump(self.__dict__, f, Dumper=Dumper)
 
+    
+    def load(self, filename='params.yaml'):
+        try:
+            with open(filename, 'r') as f:
+                new_params_dict = yaml.load(f, Loader=Loader)
+                self.__dict__.update(**new_params_dict)
+        except:
+            raise FileNotFoundError('Cant find such params file')
+        
+    
     def __repr__(self) -> str:
         return str(self.__dict__)
+
+

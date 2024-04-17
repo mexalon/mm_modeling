@@ -105,7 +105,7 @@ def plot_press(data, loc, params, vmin_vmax=None, save=False, fname='Pore pressu
 
     # колорбар
     plt.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
-              ax=(ax2, ax3), orientation='vertical', label='Pore pressure, MPa')
+                ax=(ax2, ax3), orientation='vertical', label='Pore pressure, MPa')
 
     if save:
         plt.savefig(f'{fname}.png', dpi = 300,  bbox_inches='tight', transparent=False)
@@ -147,7 +147,7 @@ def plot_events_slice(data, loc, params, vmin_vmax=None, save=False, fname='seis
 
     # колорбар
     plt.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
-              ax=(ax2, ax3), orientation='vertical', label='Seismic density')
+                ax=(ax2, ax3), orientation='vertical', label='Seismic density')
 
     if save:
         plt.savefig(f'{fname}.png', dpi = 300,  bbox_inches='tight', transparent=False)
@@ -189,7 +189,7 @@ def plot_events_projection(data, params, vmin_vmax=None, save=False, fname='seis
 
     # колорбар
     plt.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap),
-              ax=(ax2, ax3), orientation='vertical', label='Seismic density')
+                ax=(ax2, ax3), orientation='vertical', label='Seismic density')
 
     if save:
         plt.savefig(f'{fname}.png', dpi=300,  bbox_inches='tight', transparent=False)

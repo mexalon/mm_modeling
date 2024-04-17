@@ -1,0 +1,74 @@
+K_m: 10000
+K_ro: 10000
+NSAMPL: 200
+P0: 0.1
+alpha: 1
+dt: 0.0001
+dx_dy_dz: !!python/tuple
+- 190.47619047619048
+- 190.47619047619048
+- 47.61904761904762
+m0: 0.2
+mu: 2
+poisson: 0.3
+ro: 1
+shape: !!python/tuple
+- 21
+- 21
+- 21
+side_lenght: !!python/tuple
+- 4000
+- 4000
+- 1000
+sides: !!python/tuple
+- &id001 !!python/tuple
+  - 0
+  - 4000
+- *id001
+- !!python/tuple
+  - 1000
+  - 2000
+sources:
+- P: 0.2
+  Q:
+  - 1
+  - 1
+  loc: !!python/tuple
+  - 2000
+  - 2000
+  - 1500
+- P: -0.05
+  Q:
+  - -0.25
+  - -0.25
+  loc: !!python/tuple
+  - 500
+  - 500
+  - 1500
+- P: -0.05
+  Q:
+  - -0.25
+  - -0.25
+  loc: !!python/tuple
+  - 3500
+  - 500
+  - 1500
+- P: -0.05
+  Q:
+  - -0.25
+  - -0.25
+  loc: !!python/tuple
+  - 3500
+  - 3500
+  - 1500
+- P: -0.05
+  Q:
+  - -0.25
+  - -0.25
+  loc: !!python/tuple
+  - 500
+  - 3500
+  - 1500
+t_range: 120
+target_events_num: 1000
+time_scale: 3600

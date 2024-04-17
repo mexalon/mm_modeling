@@ -47,7 +47,8 @@ class Diffusion_with_Source_and_Gravity(PDEBase):
         return hydro_press
 
    
-    def make_interp_from_q_list(self, q):
+    def make_interp_from_q_list(self, q_list):
+        q = np.array(q_list)
         t = np.linspace(0, self.params.t_range, q.size)
         f = make_interp_spline(t, q, k=1)
         return f
@@ -188,7 +189,8 @@ class Non_Uniform_Diffusion_with_Source(PDEBase):
         self.source_field = self.update_source_field(0) # spatial source field, initial state
 
    
-    def make_interp_from_q_list(self, q):
+    def make_interp_from_q_list(self, q_list):
+        q = np.array(q_list)
         t = np.linspace(0, self.params.t_range, q.size)
         f = make_interp_spline(t, q, k=1)
         return f
@@ -345,7 +347,8 @@ class Non_Uniform_Diffusion_with_Source_and_Gravity(PDEBase):
         return hydro_press
 
    
-    def make_interp_from_q_list(self, q):
+    def make_interp_from_q_list(self, q_list):
+        q = np.array(q_list)
         t = np.linspace(0, self.params.t_range, q.size)
         f = make_interp_spline(t, q, k=1)
         return f

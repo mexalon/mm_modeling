@@ -176,20 +176,30 @@ def tar_to_downscaled_models(path_to_models, nmodels, target_shape: tuple, fname
             models_random_short_list = models_in_tar_zipped_list[0:nmodels]
                 
             for g00_path, g12_path in tqdm(models_random_short_list):          
-                rock_dict = get_rocks_from_g00(g00_path)
-                labels = get_labels_from_g12(g12_path)
-                rock_dict = add_random_perm_by_rock_type(rock_dict) # add permeability
-                perm_model = map_labels_with_some_prop(labels, rock_dict, 'perm') # permrability model mD
-                dens_model = map_labels_with_some_prop(labels, rock_dict, 'dens') # density model g/cm^3
+                try:
+                    rock_dict = get_rocks_from_g00(g00_path)
+                    labels = get_labels_from_g12(g12_path)
+                    rock_dict = add_random_perm_by_rock_type(rock_dict) # add permeability
+                    perm_model = map_labels_with_some_prop(labels, rock_dict, 'perm') # permrability model mD
+                    dens_model = map_labels_with_some_prop(labels, rock_dict, 'dens') # density model g/cm^3
 
-                perm_model = downscale_to_shape(perm_model, target_shape) # downscaling
-                dens_model = downscale_to_shape(dens_model, target_shape)
+                    if np.min(perm_model) > 0 and np.min(dens_model) > 0:
 
-                write_to_h5dataset(idx, perm_model, perm_h5_set) # writing
-                write_to_h5dataset(idx, dens_model, dens_h5_set)
+                        perm_model = downscale_to_shape(perm_model, target_shape) # downscaling
+                        dens_model = downscale_to_shape(dens_model, target_shape)
 
-                name = g00_path.split('.')[0] # names of initial files just in case for future needs
-                idx += 1
+                        write_to_h5dataset(idx, perm_model, perm_h5_set) # writing
+                        write_to_h5dataset(idx, dens_model, dens_h5_set)
+
+                        name = g00_path.split('.')[0] # names of initial files just in case for future needs
+                        idx += 1
+                        
+                    else:
+                        print(f'something wrong with data in {g00_path.split('.')[0]}')
+
+                except:
+                    print(f'Erron while reading {g00_path.split('.')[0]}')
+                    continue
                 
             del_folder(gz_root_dirname.split('/')[0]) #clear it
 
