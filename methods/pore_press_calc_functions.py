@@ -10,7 +10,7 @@ class Diffusion_with_Source_and_Gravity(PDEBase):
     """Diffusion equation with spatial dependence"""
     def __init__(self, perm, params):
         super().__init__()
-        cache_rhs = True
+        # cache_rhs = True
         # explicit_time_dependence = True
         self.perm = perm
         self.params = params
@@ -165,7 +165,7 @@ class Non_Uniform_Diffusion_with_Source(PDEBase):
     """Diffusion equation with spatial dependence"""
     def __init__(self, perm, params):
         super().__init__()
-        cache_rhs = True
+        # cache_rhs = True
         # explicit_time_dependence = True
         self.perm = perm
         self.params = params
@@ -310,7 +310,7 @@ class Non_Uniform_Diffusion_with_Source_and_Gravity(PDEBase):
     """Diffusion equation with spatial dependence"""
     def __init__(self, perm, params):
         super().__init__()
-        cache_rhs = True
+        # cache_rhs = True
         # explicit_time_dependence = True
         self.perm = perm
         self.params = params

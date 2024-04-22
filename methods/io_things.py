@@ -147,6 +147,39 @@ def add_data_to_h5dataset(fname, idx, data, set_name):
             ev_set = f.create_dataset(set_name,  (max_len,) + data.shape, dtype='float16') # creating dataset with size like maximum other set size in the file
 
         f[set_name][idx] = data
+        
+
+def split_hdf5_random(input_file, output_file1, output_file2, split_percent):
+    """
+    Splits an HDF5 file with 3 datasets into two files with random subsets of (almost) equal length.
+
+    Args:
+    input_file (str): Path to the input HDF5 file.
+    output_file1 (str): Path to the first output HDF5 file.
+    output_file2 (str): Path to the second output HDF5 file.
+    split_percent (float): Percentage of data for the first file (0.0 to 1.0).
+    """
+    with h5py.File(input_file, "r") as in_file:
+        datasets = list(in_file.keys())
+
+        with h5py.File(output_file1, "w") as out_file1, h5py.File(output_file2, "w") as out_file2:
+            shapes = [in_file[name].shape for name in datasets]
+            data_len = shapes[0][0]
+            split_index = int(data_len * split_percent)
+            data_points = list(range(data_len))
+            random.shuffle(data_points)
+            idxs_1 = data_points[:split_index]
+            idxs_2 = data_points[split_index:]
+
+            for dataset_name, data_shape in zip(datasets, shapes):
+                out_file1.create_dataset(dataset_name, shape=(len(idxs_1),) + data_shape[1:], dtype=in_file[dataset_name].dtype)
+                out_file2.create_dataset(dataset_name, shape=(len(idxs_2),) + data_shape[1:], dtype=in_file[dataset_name].dtype)
+
+                subset1 = [in_file[dataset_name][i] for i in idxs_1]
+                subset2 = [in_file[dataset_name][i] for i in idxs_2]
+
+                out_file1[dataset_name][:] = subset1
+                out_file2[dataset_name][:] = subset2
 
 
 def tar_to_downscaled_models(path_to_models, nmodels, target_shape: tuple, fname='downscaled_models'):
@@ -241,3 +274,6 @@ def check_tar_integrity(folder_path):
       pbar.update(1)  # Update progress bar after each file
 
   pbar.close()  # Close progress bar
+
+
+
