@@ -4,7 +4,7 @@ import numpy as np
 from numpy.polynomial import polynomial as P
 
 
-class Micro_Seismic_Seeds():
+class Micro_Seismic_Seeds:
     def __init__(self, params, **kwargs):
         self.params = params
         self.NSAMPL = self.params.NSAMPL

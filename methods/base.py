@@ -12,12 +12,11 @@ class BaseConfig:
         self.shape = (21, 21, 21)   
 
         # time params 
-        self.time_scale = 86400 # time scale in sec.
-        self.t_range = 30 # time steps 
-        self.dt = 0.0001 # dt, relative to self.time_scale
-
+        self.time_scale = 3600 # time scale in sec.
+        self.t_range = 120 # time steps 
+    
         # ini pore press
-        self.P0 = 0.1 # default pore Pressure is 0.1 MPa (1 bar)
+        self.P0 = 0.1 # default pore pressure is 0.1 MPa (1 bar)
 
         # sources
         self.sources = [
@@ -39,6 +38,10 @@ class BaseConfig:
         # seismic params
         self.NSAMPL = 100 # modeling param
         self.target_events_num = 1000 # desired number of events to distribute
+        self.events_list_pad = 100 # padding amount for event list, 1100 lines total
+
+        # machine learning params
+
     
         self.__dict__.update(kwargs) # updating while init
         

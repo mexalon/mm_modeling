@@ -18,6 +18,7 @@ params.load() # loading from existing params.yaml file. To dump some BaseConfig 
 
 # eq initial setup
 eq = Diffusion_with_Source_and_Gravity(np.ones(params.shape), params)
+storage = MemoryStorage(write_mode='truncate')
 
 perms_path = 'downscaled_models_04_16_2024__17_47_01.h5'
 
@@ -50,7 +51,6 @@ for ii in pbar:
     q_factors = get_q_factors(perm, p0, params)
     eq.source_field = eq.update_source_field(0, q_factors) # updating source fields q_new = q * factor
     
-    storage = MemoryStorage()
     res = eq.solve(p0, t_range=params.t_range, adaptive=True, tracker=[storage.tracker(1)])
     # res = eq.solve(p0, t_range=params.t_range, adaptive=True, tracker=['progress', 'plot', storage.tracker(1)]) # use it for testing
     pore_press = np.stack(storage.data, axis=0) # 4d np array
