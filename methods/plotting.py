@@ -32,7 +32,8 @@ def plot_perm(data, loc, params, vmin_vmax=None, save=False, fname='permeability
     if vmin_vmax is None:
         norm = mpl.colors.Normalize(vmin=np.min(data), vmax=np.max(data))
     else:
-        norm = mpl.colors.LogNorm(vmin=vmin_vmax[0], vmax=vmin_vmax[1])
+        norm = mpl.colors.Normalize(vmin=vmin_vmax[0], vmax=vmin_vmax[1])
+        # norm = mpl.colors.LogNorm(vmin=vmin_vmax[0], vmax=vmin_vmax[1])
 
     x_ax, y_ax, z_ax = (np.linspace(s[0], s[1], sh)/1000 for sh, s in zip(params.shape, params.sides))  # km
 
@@ -76,7 +77,8 @@ def plot_press(data, loc, params, vmin_vmax=None, save=False, fname='Pore pressu
     if vmin_vmax is None:
         norm = mpl.colors.Normalize(vmin=np.min(data), vmax=np.max(data))
     else:
-        norm = mpl.colors.LogNorm(vmin=vmin_vmax[0], vmax=vmin_vmax[1])
+        norm = mpl.colors.Normalize(vmin=vmin_vmax[0], vmax=vmin_vmax[1])
+        # norm = mpl.colors.LogNorm(vmin=vmin_vmax[0], vmax=vmin_vmax[1])
 
     x_ax, y_ax, z_ax = (np.linspace(s[0], s[1], sh)/1000 for sh, s in zip(params.shape, params.sides))  # km
 
@@ -118,7 +120,8 @@ def plot_events_slice(data, loc, params, vmin_vmax=None, save=False, fname='seis
     if vmin_vmax is None:
         norm = mpl.colors.Normalize(vmin=np.min(data), vmax=np.max(data))
     else:
-        norm = mpl.colors.LogNorm(vmin=vmin_vmax[0], vmax=vmin_vmax[1])
+        norm = mpl.colors.Normalize(vmin=vmin_vmax[0], vmax=vmin_vmax[1])
+        # norm = mpl.colors.LogNorm(vmin=vmin_vmax[0], vmax=vmin_vmax[1])
 
     x_ax, y_ax, z_ax = (np.linspace(s[0], s[1], sh)/1000 for sh, s in zip(params.shape, params.sides))  # km
 
@@ -160,7 +163,8 @@ def plot_events_projection(data, params, vmin_vmax=None, save=False, fname='seis
     if vmin_vmax is None:
         norm = mpl.colors.Normalize(vmin=np.min(data), vmax=np.max(data))
     else:
-        norm = mpl.colors.LogNorm(vmin=vmin_vmax[0], vmax=vmin_vmax[1])
+        norm = mpl.colors.Normalize(vmin=vmin_vmax[0], vmax=vmin_vmax[1])
+        # norm = mpl.colors.LogNorm(vmin=vmin_vmax[0], vmax=vmin_vmax[1])
 
     x_ax, y_ax, z_ax = (np.linspace(s[0], s[1], sh)/1000 for sh, s in zip(params.shape, params.sides))  # km
 

@@ -184,6 +184,13 @@ def get_events_list(ev_matrix):
     return result
 
 
+def get_events_vs_time(events):
+    '''returns event count vs time'''
+    times, counts = np.unique(events[:,0], return_counts=True)
+    events_vs_time = np.stack((times[times>=0], counts[times>=0]))
+    return events_vs_time
+
+
 def pad_events(ev_list, targ_len):
     ev_len = ev_list.shape[0]
     if ev_len > targ_len:
