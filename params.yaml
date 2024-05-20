@@ -3,11 +3,11 @@ K_ro: 10000
 NSAMPL: 200
 P0: 0.1
 alpha: 1
-dt: 0.0001
 dx_dy_dz: !!python/tuple
 - 190.47619047619048
 - 190.47619047619048
 - 47.61904761904762
+events_list_pad: 100
 m0: 0.2
 mu: 2
 poisson: 0.3
